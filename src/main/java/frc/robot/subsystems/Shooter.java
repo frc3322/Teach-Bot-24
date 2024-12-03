@@ -8,6 +8,9 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
@@ -30,6 +33,18 @@ public class Shooter extends SubsystemBase {
     bottomMotor.burnFlash();
   }
 
+public void setWheelSpeed(double topWheel, double bottomWheel) {
+  topMotor.set(topWheel);
+  bottomMotor.set(bottomWheel);
+}
+
+public Command shootCommand(double topWheel, double bottomWheel) {
+  
+  
+  return new RunCommand(
+    () -> setWheelSpeed(topWheel, bottomWheel),
+    this);
+}
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
