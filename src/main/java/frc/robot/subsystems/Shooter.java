@@ -39,8 +39,7 @@ public void setWheelSpeed(double topWheel, double bottomWheel) {
 }
 
 public Command shootCommand(double topWheel, double bottomWheel) {
-  
-  
+  //Shoots 
   return new RunCommand(
     () -> setWheelSpeed(topWheel, bottomWheel),
     this);
