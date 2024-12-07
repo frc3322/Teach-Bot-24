@@ -220,4 +220,11 @@ public final class Constants {
     public static final double shelf3Height = 2;
     public static final double shelf4Height = 3;
   }
+
+  public static final class OIConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final double kDriveDeadband = 0.09;
+    public static int kSecondaryControllerPort = 1;
+  }
+
 }

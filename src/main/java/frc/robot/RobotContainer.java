@@ -4,22 +4,26 @@
 
 package frc.robot;
 
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   // Subsystem Declarations
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Shooter m_shooter = new Shooter();
   private final Elevator m_elevator = new Elevator();
   private final Intake m_intake = new Intake();
+  private final Drivetrain m_drivetrain = new Drivetrain();
 
   // Driver Controller declaration
   private final CommandXboxController m_driverController =
@@ -33,7 +37,20 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
+    m_drivetrain.setDefaultCommand(
+    // The left stick controls translation of the robot.
+    // Turning is controlled by the X axis of the right stick.
+    new RunCommand(
+        () -> m_drivetrain.drive(
+            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getRightX() / 1.2, OIConstants.kDriveDeadband),
+            true, true),
+        m_drivetrain));
   }
+
+  
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -45,6 +62,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    m_driverController.start().onTrue(new InstantCommand(()->m_drivetrain.zeroHeading()));
+
 
     //Shooter
     m_secondaryController.rightBumper()
