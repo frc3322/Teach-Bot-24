@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,38 +13,43 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
+public class Intake extends SubsystemBase {
+  /** Creates a new Intake. */
+  CANSparkMax topMotor = new CANSparkMax(CANIds.intakeTopMotor, MotorType.kBrushless);
+  CANSparkMax bottomMotor = new CANSparkMax(CANIds.intakeBottomMotor, MotorType.kBrushless);
 
-public class Shooter extends SubsystemBase {
-
-  CANSparkFlex topMotor = new CANSparkFlex(CANIds.shooterTopMotor, MotorType.kBrushless);
-  CANSparkFlex bottomMotor = new CANSparkFlex(CANIds.shooterBottomMotor, MotorType.kBrushless);
-
-  /** Creates a new Shooter. */
-  public Shooter() {
+  public Intake() {
     topMotor.restoreFactoryDefaults();
     bottomMotor.restoreFactoryDefaults();
     
     topMotor.setIdleMode(IdleMode.kCoast);
     bottomMotor.setIdleMode(IdleMode.kCoast);
     
+    topMotor.setInverted(true);
+    bottomMotor.follow(topMotor, true);
+
     topMotor.burnFlash();
     bottomMotor.burnFlash();
   }
 
-public void setWheelSpeed(double topWheel, double bottomWheel) {
-  topMotor.set(topWheel);
-  bottomMotor.set(bottomWheel);
-}
+  private void setIntakeSpeed(double speed) {
+    topMotor.set(speed);
+  }
 
-public Command shootCommand(double topWheel, double bottomWheel) {
-  //Shoots 
-  return new RunCommand(
-    () -> setWheelSpeed(topWheel, bottomWheel),
-    this);
-}
+  private void stopIntakeMotor() {
+    topMotor.set(0);
+  }
+
+  public Command setIntakeCommand(double speed) {
+    return new RunCommand(()-> setIntakeSpeed(speed), this);
+  }
+
+  public Command stopIntakeCommand() {
+    return new RunCommand(()-> stopIntakeMotor(), this);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
   }
 }

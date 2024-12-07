@@ -15,10 +15,13 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kSecondaryControllerPort = 1;
   }
 
   public static class CANIds {
     public static final int shooterTopMotor = 1;
     public static final int shooterBottomMotor = 2;
+    public static final int intakeTopMotor = 3;
+    public static final int intakeBottomMotor = 4;
   }
 }
