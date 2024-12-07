@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -17,6 +18,7 @@ public class RobotContainer {
   // Subsystem Declarations
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Shooter m_shooter = new Shooter();
+  private final Elevator m_elevator = new Elevator();
   private final Intake m_intake = new Intake();
 
   // Driver Controller declaration
@@ -52,7 +54,12 @@ public class RobotContainer {
     m_secondaryController.leftBumper()
     .whileTrue(m_intake.setIntakeCommand(0.5))
     .whileFalse(m_intake.stopIntakeCommand());
-    
+
+    //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
+    m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
+    m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
+    m_secondaryController.x().onTrue(m_elevator.goToShelf3Command());
+    m_secondaryController.y().onTrue(m_elevator.goToShelf4Command());
     
   }
 

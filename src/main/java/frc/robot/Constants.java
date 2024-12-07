@@ -23,5 +23,18 @@ public final class Constants {
     public static final int shooterBottomMotor = 2;
     public static final int intakeTopMotor = 3;
     public static final int intakeBottomMotor = 4;
+    public static final int elevatorMotor = 3;
+  }
+
+  public static class elevatorConstants {
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double elevatorGearRatio = 5;
+    public static final double shelf1Height = 0;
+    public static final double shelf2Height = 1;
+    public static final double shelf3Height = 2;
+    public static final double shelf4Height = 3;
   }
 }
