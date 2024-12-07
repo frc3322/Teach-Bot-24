@@ -15,10 +15,24 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kSecondaryControllerPort = 1;
   }
 
   public static class CANIds {
     public static final int shooterTopMotor = 1;
     public static final int shooterBottomMotor = 2;
+    public static final int elevatorMotor = 3;
+  }
+
+  public static class elevatorConstants {
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double elevatorGearRatio = 5;
+    public static final double shelf1Height = 0;
+    public static final double shelf2Height = 1;
+    public static final double shelf3Height = 2;
+    public static final double shelf4Height = 3;
   }
 }

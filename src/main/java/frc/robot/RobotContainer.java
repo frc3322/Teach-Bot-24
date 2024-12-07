@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,10 +17,14 @@ public class RobotContainer {
   // Subsystem Declarations
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Shooter m_shooter = new Shooter();
+  private final Elevator m_elevator = new Elevator();
 
   // Driver Controller declaration
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    
+  private final CommandXboxController m_secondaryController = 
+      new CommandXboxController(OperatorConstants.kSecondaryControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -41,9 +45,15 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Shooter
-    m_driverController.rightBumper()
+    m_secondaryController.rightBumper()
     .whileTrue(m_shooter.shootCommand(.5, .5))
     .whileFalse(m_shooter.shootCommand(0, 0));
+    
+    //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
+    m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
+    m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
+    m_secondaryController.x().onTrue(m_elevator.goToShelf3Command());
+    m_secondaryController.y().onTrue(m_elevator.goToShelf4Command());
     
   }
 
