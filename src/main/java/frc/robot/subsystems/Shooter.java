@@ -9,8 +9,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.CANIds;
+import frc.robot.Constants2;
+import frc.robot.Constants2.CANIds;
 
 
 public class Shooter extends SubsystemBase {
