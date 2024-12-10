@@ -4,36 +4,53 @@
 
 package frc.robot;
 
-import frc.robot.Constants2.OperatorConstants2;
+import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // Subsystem Declarations
   private final Shooter m_shooter = new Shooter();
+  private final Elevator m_elevator = new Elevator();
+  private final Intake m_intake = new Intake();
+  private final Drivetrain m_drivetrain = new Drivetrain();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Driver Controller declaration
   private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants2.kDriverControllerPort);
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
+  private final CommandXboxController m_secondaryController =
+      new CommandXboxController(OperatorConstants.kSecondaryControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
 
+    m_drivetrain.setDefaultCommand(
+    // The left stick controls translation of the robot.
+    // Turning is controlled by the X axis of the right stick.
+    new RunCommand(
+        () -> m_drivetrain.drive(
+            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getRightX() / 1.2, OIConstants.kDriveDeadband),
+            true, true),
+        m_drivetrain));
   }
+
+  
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -45,14 +62,25 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    m_driverController.start().onTrue(new InstantCommand(()->m_drivetrain.zeroHeading()));
+
+
+    //Shooter
+    m_secondaryController.rightBumper()
+    .whileTrue(m_shooter.shootCommand(.5, .5))
+    .whileFalse(m_shooter.shootCommand(0, 0));
+
+    m_secondaryController.leftBumper()
+    .whileTrue(m_intake.setIntakeCommand(0.5))
+    .whileFalse(m_intake.stopIntakeCommand());
+
+    //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
+    m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
+    m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
+    m_secondaryController.x().onTrue(m_elevator.goToShelf3Command());
+    m_secondaryController.y().onTrue(m_elevator.goToShelf4Command());
     
-    
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
