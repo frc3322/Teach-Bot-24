@@ -19,16 +19,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.elevatorConstants;
 import frc.robot.Constants.CANIds;
+import frc.robot.Constants.DriveConstants.ElevatorConstants;
+import frc.robot.Constants.DriveConstants.elevatorConstants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
   CANSparkMax ElevatorMotor = new CANSparkMax(CANIds.elevatorMotor, MotorType.kBrushless);
   ProfiledPIDController elevatorPID = new ProfiledPIDController(
-    elevatorConstants.kP,
-    elevatorConstants.kI,
-    elevatorConstants.kD,
+    ElevatorConstants.elevatorP,
+    ElevatorConstants.elevatorI,
+    ElevatorConstants.elevatorD,
     new TrapezoidProfile.Constraints(.1, .1));
   RelativeEncoder elevatorEncoder = ElevatorMotor.getEncoder();
 

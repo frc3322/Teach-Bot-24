@@ -1,4 +1,4 @@
-package frc.util;
+package frc.utils;
 
 public class SwerveUtils {
 
