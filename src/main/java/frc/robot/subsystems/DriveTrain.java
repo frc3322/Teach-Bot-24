@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,10 +17,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.autonConstants;
+import frc.robot.Constants.DriveConstants.AutoConstants;
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
 
 public class DriveTrain extends SubsystemBase{
   // Create MAXSwerveModules
@@ -53,6 +62,7 @@ public class DriveTrain extends SubsystemBase{
   
   private double lastDir = 0;
   
+  private SwerveDrivePoseEstimator estimatedPose;
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
@@ -72,7 +82,65 @@ public class DriveTrain extends SubsystemBase{
   /** Creates a new DriveSubsystem. */
   public DriveTrain() {
    
+    AutoBuilder.configureHolonomic(      
+    this::getPose, // Robot pose supplier
+    this::resetEstimatedPose, // Method to reset odometry (will be called if your auto has a starting pose)
+    this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+    this::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+    AutoConstants.holonomicPathFollowerConfig,
+    () -> {
+      // Boolean supplier that controls when the path will be mirrored for the red alliance
+      // This will flip the path being followed to the red side of the field.
+      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this // Reference to this subsystem to set requirements
+  );
   }
+
+  public void resetEstimatedPose(Pose2d pose){
+    estimatedPose.resetPosition(
+      Rotation2d.fromDegrees(getAngle()),
+      new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+      pose);
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds(){
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(
+            m_frontLeft.getState(),
+            m_frontRight.getState(),
+            m_rearLeft.getState(),
+            m_rearRight.getState()
+        );
+  }
+
+  public void autoDrive(ChassisSpeeds speeds) {
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
+
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+  
+
+
+  
+
+
 
   @Override
   public void periodic() {
@@ -256,6 +324,34 @@ public class DriveTrain extends SubsystemBase{
   public double getHeading() {
     return Rotation2d.fromDegrees(getAngle()).getDegrees();
   }
+
+  public Command driveForwardCommand()
+  {
+    
+    PathPlannerPath path = PathPlannerPath.fromPathFile(AutoConstants.driveForwardString);
+
+     return new FollowPathHolonomic(
+      path, //Path from params
+      this::getPose, // Robot pose supplier
+      this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      this::autoDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      AutoConstants.holonomicPathFollowerConfig,
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this // Reference to this subsystem to set requirements
+    );
+    
+  }
+
 
   /**
    * Returns the turn rate of the robot.

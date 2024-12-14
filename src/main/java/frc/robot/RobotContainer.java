@@ -7,27 +7,36 @@ package frc.robot;
 
 import frc.robot.Constants.CANIds;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.DriveConstants.AutoConstants;
 import frc.robot.Constants.DriveConstants.OIConstants;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+
+import java.util.concurrent.Callable;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+
+
 public class RobotContainer {
   // Subsystem Declarations
   private final Shooter m_shooter = new Shooter();
   private final Elevator m_elevator = new Elevator();
   private final Intake m_intakeleft = new Intake(CANIds.intakeTopMotorLeft, CANIds.intakeBottomMotorLeft);
-   private final Intake m_intakeright = new Intake(CANIds.intakeTopMotorRight, CANIds.intakeBottomMotorRight);
+  private final Intake m_intakeright = new Intake(CANIds.intakeTopMotorRight, CANIds.intakeBottomMotorRight);
   private final DriveTrain m_drivetrain = new DriveTrain();
-
+   
+  SendableChooser<Callable<Command>> autoSelector = new SendableChooser<Callable<Command>>();
   // Driver Controller declaration
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -39,6 +48,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    autoSelector.addOption("No auto", null);
+    autoSelector.addOption("driveForward", () -> m_drivetrain.driveForwardCommand());
 
     m_drivetrain.setDefaultCommand(
     // The left stick controls translation of the robot.
@@ -59,6 +71,12 @@ public class RobotContainer {
         -MathUtil.applyDeadband(m_secondaryController.getLeftY() / 10, OIConstants.kElevatorDeadband)
       ),
       m_elevator ));
+
+
+
+
+
+    
   }
 
     

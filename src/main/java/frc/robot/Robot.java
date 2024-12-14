@@ -5,8 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,10 +26,10 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+   public void robotInit() {
+    Constants.autonConstants.m_chooser.setDefaultOption("Default Auto", Constants.autonConstants.kDefaultAuto);
+    Constants.autonConstants.m_chooser.addOption("My Auto", Constants.autonConstants.kCustomAuto);
+    SmartDashboard.putData("Auto choices", Constants.autonConstants.m_chooser);
   }
 
   /**
@@ -65,8 +67,19 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
+  // @Override
+  // public void autonomousPeriodic() {
+
+  //   switch (Constants.autonConstants.m_autoSelected) {
+  //     case Constants.autonConstants.kCustomAuto:
+  //       // Put custom auto code here
+  //       break;
+  //     case Constants.autonConstants.kDefaultAuto:
+  //     default:
+  //       // Put default auto code here
+  //       break;
+        
+  // }
 
   @Override
   public void teleopInit() {
