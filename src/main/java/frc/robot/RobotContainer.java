@@ -4,10 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OIConstants;
+
+import frc.robot.Constants.CANIds;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.DriveConstants.OIConstants;
 import frc.robot.commands.Autos;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -22,8 +24,9 @@ public class RobotContainer {
   // Subsystem Declarations
   private final Shooter m_shooter = new Shooter();
   private final Elevator m_elevator = new Elevator();
-  private final Intake m_intake = new Intake();
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Intake m_intakeleft = new Intake(CANIds.intakeTopMotorLeft, CANIds.intakeBottomMotorLeft);
+   private final Intake m_intakeright = new Intake(CANIds.intakeTopMotorRight, CANIds.intakeBottomMotorRight);
+  private final DriveTrain m_drivetrain = new DriveTrain();
 
   // Driver Controller declaration
   private final CommandXboxController m_driverController =
@@ -47,7 +50,22 @@ public class RobotContainer {
             -MathUtil.applyDeadband(m_driverController.getRightX() / 1.2, OIConstants.kDriveDeadband),
             true, true),
         m_drivetrain));
+
+
+    m_elevator.setDefaultCommand(
+    //The left joystick on the secondary controller controls the vertical position of the elevator (manually).
+    new RunCommand(
+      () -> m_elevator.setElevatorPower(
+        -MathUtil.applyDeadband(m_secondaryController.getLeftY() / 10, OIConstants.kElevatorDeadband)
+      ),
+      m_elevator ));
   }
+
+    
+
+
+
+
 
   
 
@@ -67,19 +85,20 @@ public class RobotContainer {
 
 
     //Shooter
-    m_secondaryController.rightBumper()
+    m_secondaryController.leftTrigger()
     .whileTrue(m_shooter.shootCommand(.5, .5))
     .whileFalse(m_shooter.shootCommand(0, 0));
 
-    m_secondaryController.leftBumper()
-    .whileTrue(m_intake.setIntakeCommand(0.5))
-    .whileFalse(m_intake.stopIntakeCommand());
+    m_secondaryController.rightBumper()
+    .whileTrue(m_intakeright.setIntakeCommand(0.5))
+    .whileFalse(m_intakeright.stopIntakeCommand());
 
+    m_secondaryController.leftBumper()
+    .whileTrue(m_intakeleft.setIntakeCommand(0.5))
+    .whileFalse(m_intakeleft.stopIntakeCommand());
     //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
     m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
     m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
-    m_secondaryController.x().onTrue(m_elevator.goToShelf3Command());
-    m_secondaryController.y().onTrue(m_elevator.goToShelf4Command());
     
   }
 
@@ -90,6 +109,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return null;
   }
 }

@@ -28,22 +28,32 @@ public final class Constants {
   }
 
   public static class CANIds {
-    public static final int shooterTopMotor = 1;
-    public static final int shooterBottomMotor = 2;
-    public static final int kRearRightDrivingCanId = 0;
-    public static final int kRearRightTurningCanId = 0;
-    public static final int kRearLeftTurningCanId = 0;
-    public static final int kRearLeftDrivingCanId = 0;
-    public static final int kFrontRightTurningCanId = 0;
-    public static final int kFrontRightDrivingCanId = 0;
-    public static final int kFrontLeftTurningCanId = 0;
-    public static final int kFrontLeftDrivingCanId = 0;
+    public static final int shooterTopMotor = 21;
+    public static final int shooterBottomMotor = 22;
+    public static final int elevatorMotor = 25;
+    public static final int intakeBottomMotorRight = 37;
+    public static final int intakeTopMotorRight = 24;
+    public static final int intakeTopMotorLeft = 38;
+    public static final int intakeBottomMotorLeft = 25;
   }
-
+  public static class PWMIds {
+    public static final int ServoID = 13;
+  }
   public static final class DriveConstants {
+    public static final int kRearRightTurningCanId = 6;
+    public static final int kRearRightDrivingCanId = 5;
+
+    public static final int kRearLeftTurningCanId = 7;
+    public static final int kRearLeftDrivingCanId = 4;
+
+    public static final int kFrontRightTurningCanId = 1;
+    public static final int kFrontRightDrivingCanId = 2;
+
+    public static final int kFrontLeftTurningCanId = 8;
+    public static final int kFrontLeftDrivingCanId = 3;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5.74;
+    public static final double kMaxSpeedMetersPerSecond = 1.524;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 9; // radians per second //old is 9
@@ -74,75 +84,26 @@ public final class Constants {
     public static final boolean kGyroReversed = true;
 
 
-    public static final double kDistanceThreshold = .3;
-    public static final double kAngleThreshold = 15;
+    public static final class IntakeConstants{
+    public static final double intakeSpeedRight = 1;
+    public static final double intakeOutputLimitRight = 8;
+    public static final double intakespeedLeft = 1;
+    public static final double intankeOutputLimitLeft = 8;
   }
-
-  public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 5.74;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquaredSlow = 0.2;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 0.02;
-    public static final double kIThetaController = 0.00;
-    public static final double kDThetaController = 0.002;
-
-    public static final double kPHoloTranslationController = 5; //old is 5
-    public static final double kPHoloRotationController = 10;
-
-
-  }
-
-  public static final class FieldConstants {
-
-    // Amp poses. Both halves of the field together are 651.25 in long, and amp is 4 ft 1.5 in from the wall.
-    // The top wall that the amp is in is 161.625 from the center of the field. Needs to have an offset subtracted from it later
-    public static final Pose2d redAmpPose = new Pose2d(
-      new Translation2d(Units.inchesToMeters(325.625 - 49.5), Units.inchesToMeters(161.625)),
-      new Rotation2d(-90)
-    );
+  public static final class ElevatorConstants{
+    public static final double elevatorTopLimit = 1;
     
-    public static final Pose2d blueAmpPose = new Pose2d(
-      new Translation2d(-Units.inchesToMeters(325.625 - 49.5), Units.inchesToMeters(161.625)),
-      new Rotation2d(90)
-    );
+    public static final double elevatorP = .2;
+    public static final double elevatorI = 0.15;
+    public static final double elevatorD = 0.01;
+    public static final double velocityConstraint = 100;
+    public static final double accelerationConstraint = 25; 
 
-    public static final Pose2d blueCenterShootPose = new Pose2d(1.33, 5.56, new Rotation2d(Math.toRadians(0)));
-    public static final Pose2d redCenterShootPose = new Pose2d(15.33, 5.56, new Rotation2d(Math.toRadians(0)));
+    public static final double elevatorGearRatio = 5;
+    public static final double shelf1Height = 0;
+    public static final double shelf2Height = 1;
 
-    public static final Translation2d redSpeakerTranslation = new Translation2d(
-      Units.inchesToMeters(652.73),
-      Units.inchesToMeters(217)
-    );
-
-    public static final Translation2d blueSpeakerTranslation = new Translation2d(
-      Units.inchesToMeters(-1.50),
-      Units.inchesToMeters(217)
-    );
-
-    public static final Pose2d topShootPose = new Pose2d(.82, 6.66, new Rotation2d(Math.toRadians(60)));
-    public static final Pose2d centerShootPose = new Pose2d(1.33, 5.56, new Rotation2d(Math.toRadians(0)));
-    public static final Pose2d bottomShootPose = new Pose2d(.82, 4.46, new Rotation2d(Math.toRadians(-60)));
-
-    public static final Pose2d blueTopNotePose = new Pose2d(2.00, 6.50, new Rotation2d(Math.toRadians(0)));
-    public static final Pose2d blueMiddleNotePose = new Pose2d(2, 5.55, new Rotation2d(Math.toRadians(0)));
-    public static final Pose2d blueBottomNotePose = new Pose2d(2, 4.1, new Rotation2d(Math.toRadians(0)));
-    
-    public static final Pose2d redTopNotePose = new Pose2d();
-    public static final Pose2d redMiddleNotePose = new Pose2d();
-    public static final Pose2d redBottomNotePose = new Pose2d();
-  
-//centerline note poses
-    public static final Pose2d centerTopPose = new Pose2d(8.29, 7.43, new Rotation2d(0));
-    public static final Pose2d centerMidTopPose = new Pose2d(8.29, 5.79, new Rotation2d(0));
-    public static final Pose2d centerMidPose = new Pose2d(8.29, 4.11, new Rotation2d(0));
-    public static final Pose2d centerMidBottomPose = new Pose2d(8.29, 2.44, new Rotation2d(0));
-    public static final Pose2d centerBottomPose = new Pose2d(8.29, .77, new Rotation2d(0));
-
+    public static final double FreemoveRestraints = 0.1;
   }
 
 
@@ -157,7 +118,7 @@ public final class Constants {
     public static final boolean kTurningEncoderInverted = true;
 
     // Calculations required for driving motor conversion factors and feed forward
-    public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kVortexFreeSpeedRpm / 60;
+    public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
@@ -195,8 +156,8 @@ public final class Constants {
 
     public static final int kDrivingMotorCurrentLimit = 50; // amps
     public static final int kTurningMotorCurrentLimit = 20; // amps
-
   }
+
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
@@ -209,22 +170,27 @@ public final class Constants {
     public static final int elevatorMotor = 3;
   }
 
-  public static class elevatorConstants {
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-
-    public static final double elevatorGearRatio = 5;
-    public static final double shelf1Height = 0;
-    public static final double shelf2Height = 1;
-    public static final double shelf3Height = 2;
-    public static final double shelf4Height = 3;
-  }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.09;
     public static int kSecondaryControllerPort = 1;
+    public static final double kElevatorDeadband = 0.09;
   }
 
-}
+public static final class AutoConstants {
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquaredSlow = 0.2;
+    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+    public static final double kPXController = 1;
+    public static final double kPYController = 1;
+    public static final double kPThetaController = 1;
+
+    // Constraint for the motion profiled robot angle controller
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+  }
+}}

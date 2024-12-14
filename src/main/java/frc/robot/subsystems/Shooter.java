@@ -9,15 +9,21 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
+import frc.robot.Constants.PWMIds;
+import edu.wpi.first.wpilibj.Servo;
 
 
 public class Shooter extends SubsystemBase {
 
+
   CANSparkFlex topMotor = new CANSparkFlex(CANIds.shooterTopMotor, MotorType.kBrushless);
   CANSparkFlex bottomMotor = new CANSparkFlex(CANIds.shooterBottomMotor, MotorType.kBrushless);
+  private final Servo Servo = new Servo(PWMIds.ServoID);
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -30,10 +36,26 @@ public class Shooter extends SubsystemBase {
     topMotor.burnFlash();
     bottomMotor.burnFlash();
   }
+  
 
 public void setWheelSpeed(double topWheel, double bottomWheel) {
   topMotor.set(topWheel);
   bottomMotor.set(bottomWheel);
+}
+public void setServoSpinSpeeds(double speed){
+  Servo.set(speed);  
+}
+public Command spinServosCommand(){
+  return new InstantCommand(
+    ()-> setServoSpinSpeeds(1),
+    this
+    );
+}
+public Command stopServosCommand(){
+  return new InstantCommand(
+    ()-> setServoSpinSpeeds(.5),
+    this
+    );
 }
 
 public Command shootCommand(double topWheel, double bottomWheel) {
