@@ -172,6 +172,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.09;
     public static int kSecondaryControllerPort = 1;
+    public static final double kElevatorDeadband = 0.09;
   }
 
 public static final class AutoConstants {

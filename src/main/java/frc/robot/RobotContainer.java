@@ -48,7 +48,22 @@ public class RobotContainer {
             -MathUtil.applyDeadband(m_driverController.getRightX() / 1.2, OIConstants.kDriveDeadband),
             true, true),
         m_drivetrain));
+
+
+    m_elevator.setDefaultCommand(
+    //The left joystick on the secondary controller controls the vertical position of the elevator (manually).
+    new RunCommand(
+      () -> m_elevator.setElevatorPower(
+        -MathUtil.applyDeadband(m_secondaryController.getLeftY() / 10, OIConstants.kElevatorDeadband)
+      ),
+      m_elevator ));
   }
+
+    
+
+
+
+
 
   
 
