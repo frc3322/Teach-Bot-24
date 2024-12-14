@@ -15,12 +15,13 @@ import frc.robot.Constants.CANIds;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax topMotor = new CANSparkMax(CANIds.intakeTopMotor, MotorType.kBrushless);
-  CANSparkMax bottomMotor = new CANSparkMax(CANIds.intakeBottomMotor, MotorType.kBrushless);
-  CANSparkMax topMotor2 = new CANSparkMax(CANIds.intakeTopMotor2, MotorType.kBrushless);
-  CANSparkMax bottomMotor2 = new CANSparkMax(CANIds.intakeBottomMotor2, MotorType.kBrushless);
+  CANSparkMax topMotor;
+  CANSparkMax bottomMotor;
 
-  public Intake() {
+  public Intake(int topID, int bottomID) {
+    topMotor = new CANSparkMax(topID, MotorType.kBrushless);
+    bottomMotor = new CANSparkMax(bottomID, MotorType.kBrushless);
+
     topMotor.restoreFactoryDefaults();
     bottomMotor.restoreFactoryDefaults();
     
@@ -50,36 +51,7 @@ public class Intake extends SubsystemBase {
     return new RunCommand(()-> stopIntakeMotor(), this);
   }
 
- // Remove void once we have CANIDS or code wont work
-  public void Intake2() {
-    topMotor2.restoreFactoryDefaults();
-    bottomMotor2.restoreFactoryDefaults();
-    
-    topMotor2.setIdleMode(IdleMode.kCoast);
-    bottomMotor2.setIdleMode(IdleMode.kCoast);
-    
-    topMotor2.setInverted(true);
-    bottomMotor2.follow(topMotor2, true);
 
-    topMotor2.burnFlash();
-    bottomMotor2.burnFlash();
-  }
-
-  private void setIntakeSpeed2(double speed) {
-    topMotor2.set(0);
-  }
-
-  private void stopIntakeMotor2() {
-    topMotor2.set(0);
-  }
-
-  public Command setIntake2Command(double speed) {
-    return new RunCommand(()-> setIntakeSpeed2(speed), this);
-  }
-
-  public Command stopIntake2Command() {
-    return new RunCommand(()-> stopIntakeMotor2(), this);
-  }
     @Override
   public void periodic() {
     // This method will be called once per scheduler run
