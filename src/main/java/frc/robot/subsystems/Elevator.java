@@ -53,8 +53,8 @@ public class Elevator extends SubsystemBase {
     
   }
   
-  public void setElevatorPower(int power) {
-    ElevatorMotor.set(power);
+  public void setElevatorPower(double d) {
+    ElevatorMotor.set(d);
   }
 
   public void stopMotor() {
