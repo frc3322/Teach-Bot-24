@@ -19,6 +19,7 @@ public class Shooter extends SubsystemBase {
 
   CANSparkFlex topMotor = new CANSparkFlex(CANIds.shooterTopMotor, MotorType.kBrushless);
   CANSparkFlex bottomMotor = new CANSparkFlex(CANIds.shooterBottomMotor, MotorType.kBrushless);
+  private final Servo Servo = new Servo(PWMIds.ServoID);
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -31,10 +32,26 @@ public class Shooter extends SubsystemBase {
     topMotor.burnFlash();
     bottomMotor.burnFlash();
   }
+  
 
 public void setWheelSpeed(double topWheel, double bottomWheel) {
   topMotor.set(topWheel);
   bottomMotor.set(bottomWheel);
+}
+public void setServoSpinSpeeds(double speed){
+  Servo.set(speed);  
+}
+public Command spinServosCommand(){
+  return new InstantCommand(
+    ()-> setSpinSpeeds(1),
+    this
+    );
+}
+public Command stopServosCommand(){
+  return new InstantCommand(
+    ()-> setSpinSpeeds(.5),
+    this
+    );
 }
 
 public Command shootCommand(double topWheel, double bottomWheel) {
