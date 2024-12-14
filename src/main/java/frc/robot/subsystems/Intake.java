@@ -15,32 +15,26 @@ import frc.robot.Constants.CANIds;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax topMotor;
-  CANSparkMax bottomMotor;
+  CANSparkMax Motor;
 
-  public Intake(int topID, int bottomID) {
-    topMotor = new CANSparkMax(topID, MotorType.kBrushless);
-    bottomMotor = new CANSparkMax(bottomID, MotorType.kBrushless);
+  public Intake(int motorID) {
+    Motor = new CANSparkMax(motorID, MotorType.kBrushless);
 
-    topMotor.restoreFactoryDefaults();
-    bottomMotor.restoreFactoryDefaults();
+    Motor.restoreFactoryDefaults();
     
-    topMotor.setIdleMode(IdleMode.kCoast);
-    bottomMotor.setIdleMode(IdleMode.kCoast);
+    Motor.setIdleMode(IdleMode.kCoast);
     
-    topMotor.setInverted(true);
-    bottomMotor.follow(topMotor, true);
+    Motor.setInverted(true);
 
-    topMotor.burnFlash();
-    bottomMotor.burnFlash();
+    Motor.burnFlash();
   }
 
   private void setIntakeSpeed(double speed) {
-    topMotor.set(speed);
+    Motor.set(speed);
   }
 
   private void stopIntakeMotor() {
-    topMotor.set(0);
+    Motor.set(0);
   }
 
   public Command setIntakeCommand(double speed) {

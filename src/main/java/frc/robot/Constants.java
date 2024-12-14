@@ -41,10 +41,8 @@ public final class Constants {
     public static final int shooterTopMotor = 1;
     public static final int shooterBottomMotor = 2;
     public static final int elevatorMotor = 5;
-    public static final int intakeTopMotorLeft = 6;
-    public static final int intakeTopMotorRight = 9;
-    public static final int intakeBottomMotorLeft = 6;
-    public static final int intakeBottomMotorRight = 9;
+    public static final int intakeMotorLeft = 6;
+    public static final int intakeMotorRight = 9;
   }
 
   public static final class DriveConstants {

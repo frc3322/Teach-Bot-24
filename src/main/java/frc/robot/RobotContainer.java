@@ -32,8 +32,8 @@ public class RobotContainer {
   // Subsystem Declarations
   private final Shooter m_shooter = new Shooter();
   private final Elevator m_elevator = new Elevator();
-  private final Intake m_intakeleft = new Intake(CANIds.intakeTopMotorLeft, CANIds.intakeBottomMotorLeft);
-  private final Intake m_intakeright = new Intake(CANIds.intakeTopMotorRight, CANIds.intakeBottomMotorRight);
+  private final Intake m_intakeleft = new Intake(CANIds.intakeMotorLeft);
+  private final Intake m_intakeright = new Intake(CANIds.intakeMotorRight);
   private final DriveTrain m_drivetrain = new DriveTrain();
    
   SendableChooser<Callable<Command>> autoSelector = new SendableChooser<Callable<Command>>();
