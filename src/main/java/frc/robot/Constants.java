@@ -4,14 +4,17 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -22,38 +25,38 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class autonConstants {
+    public static final String kDefaultAuto = "Default";
+    public static final String kCustomAuto = "My Auto";
+    public static String m_autoSelected;
+    public static final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kSecondaryControllerPort = 1;
   }
 
   public static class CANIds {
-    public static final int shooterTopMotor = 21;
-    public static final int shooterBottomMotor = 22;
-    public static final int elevatorMotor = 25;
-    public static final int intakeBottomMotorRight = 37;
-    public static final int intakeTopMotorRight = 24;
-    public static final int intakeTopMotorLeft = 38;
-    public static final int intakeBottomMotorLeft = 25;
+    public static final int shooterTopMotor = 1;
+    public static final int shooterBottomMotor = 2;
+    public static final int elevatorMotor = 5;
+    public static final int intakeBottomMotor = 6;
+    public static final int intakeTopMotor = 9;
   }
-  public static class PWMIds {
-    public static final int ServoID = 13;
-  }
+
   public static final class DriveConstants {
-    public static final int kRearRightTurningCanId = 6;
-    public static final int kRearRightDrivingCanId = 5;
-
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kRearLeftDrivingCanId = 4;
-
-    public static final int kFrontRightTurningCanId = 1;
-    public static final int kFrontRightDrivingCanId = 2;
-
-    public static final int kFrontLeftTurningCanId = 8;
-    public static final int kFrontLeftDrivingCanId = 3;
+    public static final int kRearRightDrivingCanId = 0;
+    public static final int kRearRightTurningCanId = 0;
+    public static final int kRearLeftTurningCanId = 0;
+    public static final int kRearLeftDrivingCanId = 0;
+    public static final int kFrontRightTurningCanId = 0;
+    public static final int kFrontRightDrivingCanId = 0;
+    public static final int kFrontLeftTurningCanId = 0;
+    public static final int kFrontLeftDrivingCanId = 0;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 1.524;
+    public static final double kMaxSpeedMetersPerSecond = 5.74;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 9; // radians per second //old is 9
@@ -85,25 +88,20 @@ public final class Constants {
 
 
     public static final class IntakeConstants{
-    public static final double intakeSpeedRight = 1;
-    public static final double intakeOutputLimitRight = 8;
-    public static final double intakespeedLeft = 1;
-    public static final double intankeOutputLimitLeft = 8;
+    public static final double intakeSpeed = 1;
+    public static final double intakeOutputLimit = 8;
   }
+
   public static final class ElevatorConstants{
-    public static final double elevatorTopLimit = 1;
-    
+    public static final double elevatorTopLimit = 19.5;
+
+    public static final double[] elevatorSetpoints = {0.1, 1.9, 5.33, 9, 13, 19.5};
+
     public static final double elevatorP = .2;
     public static final double elevatorI = 0.15;
     public static final double elevatorD = 0.01;
     public static final double velocityConstraint = 100;
-    public static final double accelerationConstraint = 25; 
-
-    public static final double elevatorGearRatio = 5;
-    public static final double shelf1Height = 0;
-    public static final double shelf2Height = 1;
-
-    public static final double FreemoveRestraints = 0.1;
+    public static final double accelerationConstraint = 25;
   }
 
 
@@ -170,12 +168,22 @@ public final class Constants {
     public static final int elevatorMotor = 3;
   }
 
+  public static class elevatorConstants {
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double elevatorGearRatio = 5;
+    public static final double shelf1Height = 0;
+    public static final double shelf2Height = 1;
+    public static final double shelf3Height = 2;
+    public static final double shelf4Height = 3;
+  }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.09;
     public static int kSecondaryControllerPort = 1;
-    public static final double kElevatorDeadband = 0.09;
   }
 
 public static final class AutoConstants {
@@ -184,6 +192,19 @@ public static final class AutoConstants {
     public static final double kMaxAccelerationMetersPerSecondSquaredSlow = 0.2;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+    public static final double kPHoloTranslationController = 5;
+    public static final double kPHoloRotationController = 10;
+
+    public static final HolonomicPathFollowerConfig holonomicPathFollowerConfig = new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+      new PIDConstants(kPHoloTranslationController, 0.0, 0.0), // Translation PID constants
+      new PIDConstants(kPHoloRotationController, 0.0, 0.0), // Rotation PID constants
+      1.524, // Max module speed, in m/s //old is 4.5
+      DriveConstants.kWheelRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+      new ReplanningConfig() // Default path replanning config. See the API for the options here
+    );
+
+    public static final String driveForwardString = "Go Forward";
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;

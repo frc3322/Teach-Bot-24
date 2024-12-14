@@ -19,12 +19,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
 import frc.robot.Constants.DriveConstants.ElevatorConstants;
+import frc.robot.Constants.DriveConstants.elevatorConstants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
+
+  // public intervalElevator( boundedOut, input){
+
+  // }
+
+
   CANSparkMax ElevatorMotor = new CANSparkMax(CANIds.elevatorMotor, MotorType.kBrushless);
   ProfiledPIDController elevatorPID = new ProfiledPIDController(
     ElevatorConstants.elevatorP,
@@ -33,7 +39,6 @@ public class Elevator extends SubsystemBase {
     new TrapezoidProfile.Constraints(.1, .1));
   RelativeEncoder elevatorEncoder = ElevatorMotor.getEncoder();
 
-  private double setpoint = 0;
 
   public Elevator() {
     ElevatorMotor.restoreFactoryDefaults();
@@ -42,23 +47,13 @@ public class Elevator extends SubsystemBase {
 
     ElevatorMotor.setSmartCurrentLimit(80);
 
-    elevatorEncoder.setPositionConversionFactor(ElevatorConstants.elevatorGearRatio);
+    elevatorEncoder.setPositionConversionFactor(elevatorConstants.elevatorGearRatio);
 
     ElevatorMotor.burnFlash();
     
   }
-  // this allows us to move freely up and down without getting the robot's elevator stuck
-  public double boundedOutput(double input) {
-    if(getEncoderPos() - this.setpoint < ElevatorConstants.FreemoveRestraints && input > 0){
-      return 0;
-    };
-    if(getEncoderPos()  - this.setpoint > -ElevatorConstants.FreemoveRestraints && input < 0){
-      return 0;
-    };
-    return input;
-  } 
-
-  public void setElevatorPower(double power) {
+  
+  public void setElevatorPower(int power) {
     ElevatorMotor.set(power);
   }
 
@@ -68,7 +63,6 @@ public class Elevator extends SubsystemBase {
 
   public void setElevatorGoal(double setpoint) {
     elevatorPID.setGoal(setpoint);
-    this.setpoint = setpoint;
   }
 
   public double getEncoderPos() {
@@ -87,7 +81,7 @@ public class Elevator extends SubsystemBase {
   public Command goToShelf1Command() {
     return new SequentialCommandGroup(
       new InstantCommand( 
-        () -> setElevatorGoal(ElevatorConstants.shelf1Height)
+        () -> setElevatorGoal(elevatorConstants.shelf1Height)
       ),
       goToSetpoint()
     );
@@ -96,18 +90,31 @@ public class Elevator extends SubsystemBase {
   public Command goToShelf2Command() {
     return new SequentialCommandGroup(
       new InstantCommand( 
-        () -> setElevatorGoal(ElevatorConstants.shelf2Height)
+        () -> setElevatorGoal(elevatorConstants.shelf2Height)
       ),
       goToSetpoint()
     );
   }
-  // freemove elevator
- public Command FreemoveRestraints(double power) {
-  return new RunCommand(
-  () -> setElevatorPower(power)
-  );
- }
- 
+
+  public Command goToShelf3Command() {
+    return new SequentialCommandGroup(
+      new InstantCommand( 
+        () -> setElevatorGoal(elevatorConstants.shelf3Height)
+      ),
+      goToSetpoint()
+    );
+  }
+
+  public Command goToShelf4Command() {
+    return new SequentialCommandGroup(
+      new InstantCommand( 
+        () -> setElevatorGoal(elevatorConstants.shelf4Height)
+      ),
+      goToSetpoint()
+    );
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
