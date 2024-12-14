@@ -36,7 +36,9 @@ public final class Constants {
     public static final int intakeTopMotorLeft = 38;
     public static final int intakeBottomMotorLeft = 25;
   }
-
+  public static class PWMIds {
+    public static final int ServoID = 13;
+  }
   public static final class DriveConstants {
     public static final int kRearRightTurningCanId = 6;
     public static final int kRearRightDrivingCanId = 5;
