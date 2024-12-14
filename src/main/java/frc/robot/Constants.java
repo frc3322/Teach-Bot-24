@@ -31,8 +31,8 @@ public final class Constants {
     public static final int shooterTopMotor = 21;
     public static final int shooterBottomMotor = 22;
     public static final int elevatorMotor = 25;
-    public static final int intakeBottomMotor = 37;
-    public static final int intakeTopMotor = 24;
+    public static final int intakeBottomMotorRight = 37;
+    public static final int intakeTopMotorRight = 24;
     public static final int intakeTopMotorLeft = 38;
     public static final int intakeBottomMotorLeft = 25;
   }
@@ -51,7 +51,7 @@ public final class Constants {
     public static final int kFrontLeftDrivingCanId = 3;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5.74;
+    public static final double kMaxSpeedMetersPerSecond = 1.524;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 9; // radians per second //old is 9
@@ -83,8 +83,8 @@ public final class Constants {
 
 
     public static final class IntakeConstants{
-    public static final double intakeSpeed = 1;
-    public static final double intakeOutputLimit = 8;
+    public static final double intakeSpeedRight = 1;
+    public static final double intakeOutputLimitRight = 8;
     public static final double intakespeedLeft = 1;
     public static final double intankeOutputLimitLeft = 8;
   }

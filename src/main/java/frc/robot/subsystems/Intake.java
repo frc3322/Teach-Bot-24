@@ -15,12 +15,13 @@ import frc.robot.Constants.CANIds;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
-  CANSparkMax topMotor = new CANSparkMax(CANIds.intakeTopMotor, MotorType.kBrushless);
-  CANSparkMax bottomMotor = new CANSparkMax(CANIds.intakeBottomMotor, MotorType.kBrushless);
-  CANSparkMax topMotor2 = new CANSparkMax(CANIds.intakeTopMotorLeft, MotorType.kBrushless);
-  CANSparkMax bottomMotor2 = new CANSparkMax(CANIds.intakeBottomMotorLeft, MotorType.kBrushless);
+  CANSparkMax topMotor;
+  CANSparkMax bottomMotor;
 
-  public Intake() {
+  public Intake(int topID, int bottomID) {
+    topMotor = new CANSparkMax(topID, MotorType.kBrushless);
+    bottomMotor = new CANSparkMax(bottomID, MotorType.kBrushless);
+
     topMotor.restoreFactoryDefaults();
     bottomMotor.restoreFactoryDefaults();
     
@@ -50,21 +51,7 @@ public class Intake extends SubsystemBase {
     return new RunCommand(()-> stopIntakeMotor(), this);
   }
 
-  private void setIntakeSpeedLeft(double speed) {
-    topMotor2.set(0);
-  }
 
-  private void stopIntakeMotorLeft() {
-    topMotor2.set(0);
-  }
-
-  public Command setIntakeLeft2Command(double speed) {
-    return new RunCommand(()-> setIntakeSpeedLeft(speed), this);
-  }
-
-  public Command stopIntakeLeftCommand() {
-    return new RunCommand(()-> stopIntakeMotorLeft(), this);
-  }
     @Override
   public void periodic() {
     // This method will be called once per scheduler run

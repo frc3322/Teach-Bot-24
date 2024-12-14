@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import frc.robot.Constants.CANIds;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.DriveConstants.OIConstants;
 import frc.robot.commands.Autos;
@@ -23,7 +24,8 @@ public class RobotContainer {
   // Subsystem Declarations
   private final Shooter m_shooter = new Shooter();
   private final Elevator m_elevator = new Elevator();
-  private final Intake m_intake = new Intake();
+  private final Intake m_intakeleft = new Intake(CANIds.intakeTopMotorLeft, CANIds.intakeBottomMotorLeft);
+   private final Intake m_intakeright = new Intake(CANIds.intakeTopMotorRight, CANIds.intakeBottomMotorRight);
   private final DriveTrain m_drivetrain = new DriveTrain();
 
   // Driver Controller declaration
@@ -68,14 +70,17 @@ public class RobotContainer {
 
 
     //Shooter
-    m_secondaryController.rightBumper()
+    m_secondaryController.leftTrigger()
     .whileTrue(m_shooter.shootCommand(.5, .5))
     .whileFalse(m_shooter.shootCommand(0, 0));
 
-    m_secondaryController.leftBumper()
-    .whileTrue(m_intake.setIntakeCommand(0.5))
-    .whileFalse(m_intake.stopIntakeCommand());
+    m_secondaryController.rightBumper()
+    .whileTrue(m_intakeright.setIntakeCommand(0.5))
+    .whileFalse(m_intakeright.stopIntakeCommand());
 
+    m_secondaryController.leftBumper()
+    .whileTrue(m_intakeleft.setIntakeCommand(0.5))
+    .whileFalse(m_intakeleft.stopIntakeCommand());
     //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
     m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
     m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
