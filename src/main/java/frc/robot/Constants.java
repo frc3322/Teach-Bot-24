@@ -28,11 +28,13 @@ public final class Constants {
   }
 
   public static class CANIds {
-    public static final int shooterTopMotor = 1;
-    public static final int shooterBottomMotor = 2;
-    public static final int elevatorMotor = 5;
-    public static final int intakeBottomMotor = 6;
-    public static final int intakeTopMotor = 9;
+    public static final int shooterTopMotor = 21;
+    public static final int shooterBottomMotor = 22;
+    public static final int elevatorMotor = 25;
+    public static final int intakeBottomMotor = 37;
+    public static final int intakeTopMotor = 24;
+    public static final int intakeTopMotor2 = 38;
+    public static final int intakeBottomMotor2 = 25;
   }
 
   public static final class DriveConstants {
@@ -81,17 +83,24 @@ public final class Constants {
     public static final double intakeSpeed = 1;
     public static final double intakeOutputLimit = 8;
   }
-
+    public static final class Intake2Constants{
+    public static final double intakespeed2 = 1;
+    public static final double intankeOutputLimit2 = 8;
+  }
   public static final class ElevatorConstants{
-    public static final double elevatorTopLimit = 19.5;
-
-    public static final double[] elevatorSetpoints = {0.1, 1.9, 5.33, 9, 13, 19.5};
-
+    public static final double elevatorTopLimit = 1;
+    
     public static final double elevatorP = .2;
     public static final double elevatorI = 0.15;
     public static final double elevatorD = 0.01;
     public static final double velocityConstraint = 100;
-    public static final double accelerationConstraint = 25;
+    public static final double accelerationConstraint = 25; 
+
+    public static final double elevatorGearRatio = 5;
+    public static final double shelf1Height = 0;
+    public static final double shelf2Height = 1;
+
+    public static final double FreemoveRestraints = 0.1;
   }
 
 
@@ -158,17 +167,6 @@ public final class Constants {
     public static final int elevatorMotor = 3;
   }
 
-  public static class elevatorConstants {
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-
-    public static final double elevatorGearRatio = 5;
-    public static final double shelf1Height = 0;
-    public static final double shelf2Height = 1;
-    public static final double shelf3Height = 2;
-    public static final double shelf4Height = 3;
-  }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;

@@ -79,8 +79,6 @@ public class RobotContainer {
     //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
     m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
     m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
-    m_secondaryController.x().onTrue(m_elevator.goToShelf3Command());
-    m_secondaryController.y().onTrue(m_elevator.goToShelf4Command());
     
   }
 
