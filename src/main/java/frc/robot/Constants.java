@@ -41,8 +41,10 @@ public final class Constants {
     public static final int shooterTopMotor = 1;
     public static final int shooterBottomMotor = 2;
     public static final int elevatorMotor = 5;
-    public static final int intakeBottomMotor = 6;
-    public static final int intakeTopMotor = 9;
+    public static final int intakeTopMotorLeft = 6;
+    public static final int intakeTopMotorRight = 9;
+    public static final int intakeBottomMotorLeft = 6;
+    public static final int intakeBottomMotorRight = 9;
   }
 
   public static final class DriveConstants {
@@ -184,6 +186,12 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.09;
     public static int kSecondaryControllerPort = 1;
+    public static final double kElevatorDeadband = 0.09;
+  }
+
+  
+  public static final class PWMIds{
+    public static final int ServoID = 1;
   }
 
 public static final class AutoConstants {

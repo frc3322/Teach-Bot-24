@@ -11,10 +11,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
-import frc.robot.Constants.PWMIds;
+import frc.robot.Constants.DriveConstants.PWMIds;
 import edu.wpi.first.wpilibj.Servo;
 
 
@@ -63,6 +63,14 @@ public Command shootCommand(double topWheel, double bottomWheel) {
   return new RunCommand(
     () -> setWheelSpeed(topWheel, bottomWheel),
     this);
+}
+
+public Command servosStartEndCommand(){
+  return new StartEndCommand(
+    ()->setServoSpinSpeeds(0),
+    ()->setServoSpinSpeeds(.5),
+    this)
+    .withTimeout(1.0);
 }
   @Override
   public void periodic() {
