@@ -38,22 +38,25 @@ public final class Constants {
   }
 
   public static class CANIds {
-    public static final int shooterTopMotor = 1;
-    public static final int shooterBottomMotor = 2;
-    public static final int elevatorMotor = 5;
-    public static final int intakeMotorLeft = 6;
-    public static final int intakeMotorRight = 9;
+    public static final int shooterTopMotor = 9;
+    public static final int shooterBottomMotor = 10;
+    public static final int elevatorMotor = 11;
+    public static final int intakeMotorLeft = 13;
+    public static final int intakeMotorRight = 12;
   }
 
   public static final class DriveConstants {
-    public static final int kRearRightDrivingCanId = 0;
-    public static final int kRearRightTurningCanId = 0;
-    public static final int kRearLeftTurningCanId = 0;
-    public static final int kRearLeftDrivingCanId = 0;
-    public static final int kFrontRightTurningCanId = 0;
-    public static final int kFrontRightDrivingCanId = 0;
-    public static final int kFrontLeftTurningCanId = 0;
-    public static final int kFrontLeftDrivingCanId = 0;
+    public static final int kRearRightDrivingCanId = 6;
+    public static final int kRearRightTurningCanId = 5;
+
+    public static final int kRearLeftTurningCanId = 7;
+    public static final int kRearLeftDrivingCanId = 4;
+
+    public static final int kFrontRightTurningCanId = 1;
+    public static final int kFrontRightDrivingCanId = 2;
+    
+    public static final int kFrontLeftTurningCanId = 8;
+    public static final int kFrontLeftDrivingCanId = 3;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 5.74;
