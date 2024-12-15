@@ -51,15 +51,14 @@ public final class Constants {
 
     public static final int kRearLeftTurningCanId = 7;
     public static final int kRearLeftDrivingCanId = 4;
-
+    
     public static final int kFrontRightTurningCanId = 1;
     public static final int kFrontRightDrivingCanId = 2;
-    
     public static final int kFrontLeftTurningCanId = 8;
     public static final int kFrontLeftDrivingCanId = 3;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5.74;
+    public static final double kMaxSpeedMetersPerSecond = 1.524;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 9; // radians per second //old is 9
@@ -96,15 +95,19 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants{
-    public static final double elevatorTopLimit = 19.5;
-
-    public static final double[] elevatorSetpoints = {0.1, 1.9, 5.33, 9, 13, 19.5};
+    public static final double elevatorTopLimit = 1;
 
     public static final double elevatorP = .2;
     public static final double elevatorI = 0.15;
     public static final double elevatorD = 0.01;
     public static final double velocityConstraint = 100;
-    public static final double accelerationConstraint = 25;
+    public static final double accelerationConstraint = 25; 
+
+    public static final double elevatorGearRatio = 5;
+    public static final double shelf1Height = 0;
+    public static final double shelf2Height = 1;
+
+    public static final double FreemoveRestraints = 0.1;
   }
 
 
@@ -169,18 +172,6 @@ public final class Constants {
     public static final int intakeTopMotor = 3;
     public static final int intakeBottomMotor = 4;
     public static final int elevatorMotor = 3;
-  }
-
-  public static class elevatorConstants {
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-
-    public static final double elevatorGearRatio = 5;
-    public static final double shelf1Height = 0;
-    public static final double shelf2Height = 1;
-    public static final double shelf3Height = 2;
-    public static final double shelf4Height = 3;
   }
 
   public static final class OIConstants {

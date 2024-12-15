@@ -31,6 +31,9 @@ public class Shooter extends SubsystemBase {
     
     topMotor.setIdleMode(IdleMode.kCoast);
     bottomMotor.setIdleMode(IdleMode.kCoast);
+
+    //topMotor.setInverted(true);
+    //bottomMotor.setInverted(true);
     
     topMotor.burnFlash();
     bottomMotor.burnFlash();

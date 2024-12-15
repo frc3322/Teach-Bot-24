@@ -26,10 +26,10 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-   public void robotInit() {
-    Constants.autonConstants.m_chooser.setDefaultOption("Default Auto", Constants.autonConstants.kDefaultAuto);
-    Constants.autonConstants.m_chooser.addOption("My Auto", Constants.autonConstants.kCustomAuto);
-    SmartDashboard.putData("Auto choices", Constants.autonConstants.m_chooser);
+  public void robotInit() {
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
+    m_robotContainer = new RobotContainer();
   }
 
   /**

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -50,7 +51,8 @@ public class RobotContainer {
     configureBindings();
 
     autoSelector.addOption("No auto", null);
-    autoSelector.addOption("driveForward", () -> m_drivetrain.driveForwardCommand());
+    autoSelector.addOption("driveForward", ()->  m_drivetrain.driveForwardCommand());
+    autoSelector.addOption("drive Forward shoot", ()->  driveForwardShootCommand());
 
     m_drivetrain.setDefaultCommand(
     // The left stick controls translation of the robot.
@@ -67,7 +69,7 @@ public class RobotContainer {
     m_elevator.setDefaultCommand(
     //The left joystick on the secondary controller controls the vertical position of the elevator (manually).
     new RunCommand(
-      () -> m_elevator.setElevatorPower(
+      () -> m_elevator.FreemoveRestraints(
         -MathUtil.applyDeadband(m_secondaryController.getLeftY() / 10, OIConstants.kElevatorDeadband)
       ),
       m_elevator ));
@@ -88,23 +90,32 @@ public class RobotContainer {
 
     m_driverController.start().onTrue(new InstantCommand(()->m_drivetrain.zeroHeading()));
 
-
-    //Shooter
-    m_secondaryController.leftTrigger()
+    //shooter
+    m_secondaryController.rightTrigger()
     .whileTrue(m_shooter.shootCommand(.5, .5))
     .whileFalse(m_shooter.shootCommand(0, 0));
 
-    m_secondaryController.rightBumper()
+    //shooter toggle
+    m_secondaryController.rightBumper().onTrue(m_shooter.shootCommand(.5, .5));
+    m_secondaryController.leftBumper().onTrue(m_shooter.shootCommand(0, 0));
+
+
+    //intake 
+    m_driverController.rightBumper()
     .whileTrue(m_intakeright.setIntakeCommand(0.5))
     .whileFalse(m_intakeright.stopIntakeCommand());
 
-    m_secondaryController.leftBumper()
+    m_driverController.leftBumper()
     .whileTrue(m_intakeleft.setIntakeCommand(0.5))
     .whileFalse(m_intakeleft.stopIntakeCommand());
     //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
     m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
     m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
     
+  }
+
+  public Command driveForwardShootCommand(){
+    return new SequentialCommandGroup( m_drivetrain.driveForwardCommand(), m_shooter.shootCommand(1, 1));
   }
 
   /**
