@@ -88,7 +88,6 @@ public final class Constants {
     // Works now, reverses gyro everywhere in drivetrain
     public static final boolean kGyroReversed = true;
 
-
     public static final class IntakeConstants{
     public static final double intakeSpeed = 1;
     public static final double intakeOutputLimit = 8;

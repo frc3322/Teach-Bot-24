@@ -5,25 +5,19 @@
 package frc.robot;
 
 
-import frc.robot.Constants.CANIds;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.DriveConstants.AutoConstants;
 import frc.robot.Constants.DriveConstants.OIConstants;
-import frc.robot.commands.Autos;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeConstants.IntakeState;
 
 import java.util.concurrent.Callable;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -31,11 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
   // Subsystem Declarations
-  private final Shooter m_shooter = new Shooter();
-  private final Elevator m_elevator = new Elevator();
-  private final Intake m_intakeleft = new Intake(CANIds.intakeMotorLeft);
-  private final Intake m_intakeright = new Intake(CANIds.intakeMotorRight);
   private final DriveTrain m_drivetrain = new DriveTrain();
+  private final Intake m_intake = new Intake();
    
   SendableChooser<Callable<Command>> autoSelector = new SendableChooser<Callable<Command>>();
   // Driver Controller declaration
@@ -52,7 +43,6 @@ public class RobotContainer {
 
     autoSelector.addOption("No auto", null);
     autoSelector.addOption("driveForward", ()->  m_drivetrain.driveForwardCommand());
-    autoSelector.addOption("drive Forward shoot", ()->  driveForwardShootCommand());
 
     m_drivetrain.setDefaultCommand(
     // The left stick controls translation of the robot.
@@ -64,16 +54,6 @@ public class RobotContainer {
             -MathUtil.applyDeadband(m_driverController.getRightX() / 1.2, OIConstants.kDriveDeadband),
             true, true),
         m_drivetrain));
-
-
-    m_elevator.setDefaultCommand(
-    //The left joystick on the secondary controller controls the vertical position of the elevator (manually).
-    new RunCommand(
-      () -> m_elevator.FreemoveRestraints(
-        -MathUtil.applyDeadband(m_secondaryController.getLeftY() / 10, OIConstants.kElevatorDeadband)
-      ),
-      m_elevator ));
-    
   }
 
 
@@ -87,35 +67,19 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     m_driverController.start().onTrue(new InstantCommand(()->m_drivetrain.zeroHeading()));
-
-    //shooter
-    m_secondaryController.rightTrigger()
-    .whileTrue(m_shooter.shootCommand(.5, .5))
-    .whileFalse(m_shooter.shootCommand(0, 0));
-
-    //shooter toggle
-    m_secondaryController.rightBumper().onTrue(m_shooter.shootCommand(.5, .5));
-    m_secondaryController.leftBumper().onTrue(m_shooter.shootCommand(0, 0));
-
-
-    //intake 
-    m_driverController.rightBumper()
-    .whileTrue(m_intakeright.setIntakeCommand(0.5))
-    .whileFalse(m_intakeright.stopIntakeCommand());
-
-    m_driverController.leftBumper()
-    .whileTrue(m_intakeleft.setIntakeCommand(0.5))
-    .whileFalse(m_intakeleft.stopIntakeCommand());
-    //Sets the elevator height, the heights are numbered from bottom to top (bottom shelf is shelf 1)
-    m_secondaryController.a().onTrue(m_elevator.goToShelf1Command());
-    m_secondaryController.b().onTrue(m_elevator.goToShelf2Command());
     
-  }
+    m_driverController.rightTrigger().onTrue(m_intake.setStateCommand(IntakeState.kIntake));
+    m_driverController.rightTrigger().onFalse(m_intake.setStateCommand(IntakeState.kOff));
 
-  public Command driveForwardShootCommand(){
-    return new SequentialCommandGroup( m_drivetrain.driveForwardCommand(), m_shooter.shootCommand(1, 1));
+    m_driverController.leftTrigger().onTrue(m_intake.setStateCommand(IntakeState.kOuttake));
+    m_driverController.leftTrigger().onFalse(m_intake.setStateCommand(IntakeState.kOff));
+
+    m_driverController.leftBumper().onTrue(m_intake.setStateCommand(IntakeState.kShiftLeft));
+    m_driverController.leftBumper().onFalse(m_intake.setStateCommand(IntakeState.kOff));
+
+    m_driverController.rightBumper().onTrue(m_intake.setStateCommand(IntakeState.kShiftRight));
+    m_driverController.rightBumper().onFalse(m_intake.setStateCommand(IntakeState.kOff));
   }
 
   /**
