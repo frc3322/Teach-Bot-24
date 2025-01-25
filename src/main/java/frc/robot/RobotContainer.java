@@ -8,8 +8,9 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.DriveConstants.OIConstants;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake.Intake;
+// import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeConstants.IntakeState;
+import io.github.oblarg.oblog.Logger;
 
 import java.util.concurrent.Callable;
 
@@ -26,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // Subsystem Declarations
   private final DriveTrain m_drivetrain = new DriveTrain();
-  private final Intake m_intake = new Intake();
+  // private final Intake m_intake = new Intake();
    
   SendableChooser<Callable<Command>> autoSelector = new SendableChooser<Callable<Command>>();
   // Driver Controller declaration
@@ -68,7 +69,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_driverController.start().onTrue(new InstantCommand(()->m_drivetrain.zeroHeading()));
-    
+    /* 
     m_driverController.rightTrigger().onTrue(m_intake.setStateCommand(IntakeState.kIntake));
     m_driverController.rightTrigger().onFalse(m_intake.setStateCommand(IntakeState.kOff));
 
@@ -80,6 +81,10 @@ public class RobotContainer {
 
     m_driverController.rightBumper().onTrue(m_intake.setStateCommand(IntakeState.kShiftRight));
     m_driverController.rightBumper().onFalse(m_intake.setStateCommand(IntakeState.kOff));
+    */
+  }
+  public void updateLogger() {
+    Logger.updateEntries();
   }
 
   /**

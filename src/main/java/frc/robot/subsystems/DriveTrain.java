@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Logger;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -22,6 +24,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.AutoConstants;
 import frc.utils.SwerveUtils;
+import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Log;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -30,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 
-public class DriveTrain extends SubsystemBase{
+public class DriveTrain extends SubsystemBase implements Loggable{
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -57,6 +61,7 @@ public class DriveTrain extends SubsystemBase{
   // private final ADIS16470_IMU gyro2 = new ADIS16470_IMU();
 
   // Slew rate filter variables for controlling lateral acceleration
+  @Log
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
@@ -139,10 +144,6 @@ public class DriveTrain extends SubsystemBase{
   
 
 
-  
-
-
-
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -170,6 +171,7 @@ public class DriveTrain extends SubsystemBase{
   }
 
   // Returns the corrected yaw for the robot
+  @Log
   public double getAngle() {
     double yaw = DriveConstants.kGyroReversed ? -m_gyro.getAngle() : m_gyro.getAngle();
     return yaw;

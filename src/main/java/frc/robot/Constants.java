@@ -46,8 +46,8 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
-    public static final int kRearRightDrivingCanId = 6;
-    public static final int kRearRightTurningCanId = 5;
+    public static final int kRearRightTurningCanId = 6;
+    public static final int kRearRightDrivingCanId = 5;
 
     public static final int kRearLeftTurningCanId = 7;
     public static final int kRearLeftDrivingCanId = 4;
@@ -86,7 +86,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // Works now, reverses gyro everywhere in drivetrain
-    public static final boolean kGyroReversed = true;
+    public static final boolean kGyroReversed = false;
 
     public static final class IntakeConstants{
     public static final double intakeSpeed = 1;
